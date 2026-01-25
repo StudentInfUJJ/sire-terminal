@@ -1,0 +1,41 @@
+# Build outputs
+dist/
+build/
+*.exe
+*.app
+*.build/
+*.dist/
+*.onefile-build/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Documentos de referencia (no necesarios para el build)
+*.xls
+*.xlsx
+!requirements.txt

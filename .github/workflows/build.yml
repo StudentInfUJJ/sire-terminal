@@ -1,0 +1,130 @@
+name: Build SIRE Terminal
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Permite ejecutar manualmente
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: SIRE_Terminal.exe
+            asset_name: SIRE_Terminal_Windows.exe
+          - os: macos-latest
+            artifact_name: SIRE_Terminal
+            asset_name: SIRE_Terminal_macOS
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout codigo
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install nuitka customtkinter pandas openpyxl pillow ordered-set zstandard
+
+    - name: Obtener ruta de customtkinter
+      id: ctk
+      shell: python
+      run: |
+        import customtkinter
+        import os
+        ctk_path = os.path.dirname(customtkinter.__file__)
+
+        # GitHub Actions output
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f'path={ctk_path}\n')
+
+    - name: Build Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        python -m nuitka `
+          --onefile `
+          --standalone `
+          --windows-console-mode=disable `
+          --output-filename=SIRE_Terminal.exe `
+          --lto=yes `
+          --assume-yes-for-downloads `
+          --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" `
+          --enable-plugin=tk-inter `
+          --include-module=customtkinter `
+          --include-module=pandas `
+          --include-module=openpyxl `
+          --include-module=PIL `
+          --nofollow-import-to=matplotlib `
+          --nofollow-import-to=scipy `
+          --nofollow-import-to=pytest `
+          --nofollow-import-to=IPython `
+          sire_terminal.py
+
+    - name: Build macOS
+      if: matrix.os == 'macos-latest'
+      run: |
+        python -m nuitka \
+          --onefile \
+          --standalone \
+          --output-filename=SIRE_Terminal \
+          --lto=yes \
+          --assume-yes-for-downloads \
+          --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" \
+          --enable-plugin=tk-inter \
+          --include-module=customtkinter \
+          --include-module=pandas \
+          --include-module=openpyxl \
+          --include-module=PIL \
+          --nofollow-import-to=matplotlib \
+          --nofollow-import-to=scipy \
+          --nofollow-import-to=pytest \
+          --nofollow-import-to=IPython \
+          sire_terminal.py
+
+    - name: Subir artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.asset_name }}
+        path: ${{ matrix.artifact_name }}
+        retention-days: 90
+
+  # Job para crear release cuando se pushea un tag
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+    - name: Descargar artefactos Windows
+      uses: actions/download-artifact@v4
+      with:
+        name: SIRE_Terminal_Windows.exe
+        path: ./windows
+
+    - name: Descargar artefactos macOS
+      uses: actions/download-artifact@v4
+      with:
+        name: SIRE_Terminal_macOS
+        path: ./macos
+
+    - name: Crear Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./windows/SIRE_Terminal.exe
+          ./macos/SIRE_Terminal
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
