@@ -10,71 +10,95 @@ GitHub Actions workflow para **compilar aplicaciones Python** en **Windows y mac
 
 - ✅ Compila tu app Python a **ejecutable nativo** (no necesita Python instalado)
 - ✅ Genera binarios para **Windows (.exe)** y **macOS** automáticamente
-- ✅ Build en la nube gratis (GitHub Actions)
+- ✅ Build en la nube gratis con GitHub Actions
 - ✅ Más pequeño y rápido que PyInstaller
 
 ## Cómo usar este template
 
-### 1. Copia el workflow
+### 1. Fork o copia este repositorio
 
-Copia `.github/workflows/build.yml` a tu repositorio.
+### 2. Reemplaza `example_app.py` con tu aplicación
 
-### 2. Ajusta el archivo principal
+### 3. Edita el workflow (`.github/workflows/build.yml`)
 
-Edita el workflow y cambia `sire_terminal.py` por tu archivo principal:
-
-```yaml
-sire_terminal.py  →  tu_app.py
-```
-
-### 3. Ajusta las dependencias
-
-Modifica el paso "Instalar dependencias":
+Cambia el nombre del archivo y del ejecutable:
 
 ```yaml
-pip install nuitka customtkinter pandas openpyxl pillow
+# Línea 58 y 74: cambia example_app.py por tu archivo
+example_app.py  →  mi_app.py
+
+# Líneas 17-22: cambia nombres de artifacts
+artifact_name: MiApp.exe
+asset_name: MiApp_Windows.exe
 ```
 
-### 4. Push y listo
+### 4. Ajusta las dependencias
+
+Si tu app usa librerías adicionales, agrégalas en el paso "Instalar dependencias":
+
+```yaml
+pip install nuitka customtkinter pillow TU_LIBRERIA
+```
+
+Y en el build:
+
+```yaml
+--include-package=TU_LIBRERIA
+```
+
+### 5. Push y listo
 
 ```bash
 git push
 ```
 
-GitHub compilará automáticamente para ambas plataformas.
+GitHub compilará automáticamente para ambas plataformas (~15-30 min).
 
-## Estructura del workflow
+## Estructura del proyecto
 
-```yaml
-Jobs:
-  ├── build (windows-latest)  → SIRE_Terminal.exe
-  └── build (macos-latest)    → SIRE_Terminal
+```
+├── .github/workflows/
+│   └── build.yml          # Workflow de GitHub Actions
+├── example_app.py         # App de ejemplo (reemplazar)
+├── requirements.txt       # Dependencias Python
+└── README.md
 ```
 
-## Ventajas vs PyInstaller
+## Ventajas de Nuitka vs PyInstaller
 
 | Característica | Nuitka | PyInstaller |
 |---------------|--------|-------------|
-| Tamaño | ~30-60 MB | ~150-250 MB |
-| Velocidad | Más rápido | Normal |
-| Compilación | A código C | Empaquetado |
-| Anti-virus | Menos falsos positivos | Más detecciones |
+| Tamaño ejecutable | ~20-60 MB | ~100-250 MB |
+| Velocidad ejecución | Más rápido | Normal |
+| Método | Compila a C | Empaqueta bytecode |
+| Falsos positivos antivirus | Menos | Más frecuentes |
 
-## Requisitos
+## Límites de GitHub Actions
 
-- Repositorio público (builds ilimitados gratis)
-- O privado (2,000 min/mes gratis)
+| Tipo de repo | Minutos gratis/mes |
+|--------------|-------------------|
+| **Público** | ∞ Ilimitado |
+| Privado | 2,000 min |
 
-## Tiempo de build
+## Tiempo de build aproximado
 
-| Plataforma | Tiempo aprox. |
-|------------|---------------|
-| Windows | 40-60 min |
-| macOS | 25-35 min |
+| Plataforma | Tiempo |
+|------------|--------|
+| Windows | 15-40 min |
+| macOS | 10-25 min |
 
 ## Descargar ejecutables
 
-Después del build, descarga desde **Actions → Artifacts** o crea un Release.
+Después del build:
+1. Ve a **Actions** en tu repo
+2. Selecciona el workflow completado
+3. Descarga desde **Artifacts**
+
+Para releases públicos, crea un tag:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ---
 

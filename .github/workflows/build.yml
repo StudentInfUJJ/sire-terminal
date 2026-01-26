@@ -1,4 +1,4 @@
-name: Build SIRE Terminal
+name: Build Cross-Platform App
 
 on:
   push:
@@ -15,11 +15,11 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: SIRE_Terminal.exe
-            asset_name: SIRE_Terminal_Windows.exe
+            artifact_name: ExampleApp.exe
+            asset_name: ExampleApp_Windows.exe
           - os: macos-latest
-            artifact_name: SIRE_Terminal
-            asset_name: SIRE_Terminal_macOS
+            artifact_name: ExampleApp
+            asset_name: ExampleApp_macOS
 
     runs-on: ${{ matrix.os }}
 
@@ -36,7 +36,7 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install nuitka customtkinter pandas openpyxl pillow ordered-set zstandard
+        pip install nuitka customtkinter pillow ordered-set zstandard
 
     - name: Obtener ruta de customtkinter
       id: ctk
@@ -45,8 +45,6 @@ jobs:
         import customtkinter
         import os
         ctk_path = os.path.dirname(customtkinter.__file__)
-
-        # GitHub Actions output
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             f.write(f'path={ctk_path}\n')
 
@@ -57,23 +55,14 @@ jobs:
           --onefile `
           --standalone `
           --windows-console-mode=disable `
-          --output-filename=SIRE_Terminal.exe `
+          --output-filename=ExampleApp.exe `
           --lto=yes `
           --assume-yes-for-downloads `
           --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" `
           --enable-plugin=tk-inter `
           --include-package=customtkinter `
-          --include-package=pandas `
-          --include-package=openpyxl `
           --include-package=PIL `
-          --include-package=numpy `
-          --nofollow-import-to=matplotlib `
-          --nofollow-import-to=scipy `
-          --nofollow-import-to=pytest `
-          --nofollow-import-to=IPython `
-          --nofollow-import-to=pandas.tests `
-          --nofollow-import-to=numpy.testing `
-          sire_terminal.py
+          example_app.py
 
     - name: Build macOS
       if: matrix.os == 'macos-latest'
@@ -81,23 +70,14 @@ jobs:
         python -m nuitka \
           --onefile \
           --standalone \
-          --output-filename=SIRE_Terminal \
+          --output-filename=ExampleApp \
           --lto=yes \
           --assume-yes-for-downloads \
           --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" \
           --enable-plugin=tk-inter \
           --include-package=customtkinter \
-          --include-package=pandas \
-          --include-package=openpyxl \
           --include-package=PIL \
-          --include-package=numpy \
-          --nofollow-import-to=matplotlib \
-          --nofollow-import-to=scipy \
-          --nofollow-import-to=pytest \
-          --nofollow-import-to=IPython \
-          --nofollow-import-to=pandas.tests \
-          --nofollow-import-to=numpy.testing \
-          sire_terminal.py
+          example_app.py
 
     - name: Subir artefacto
       uses: actions/upload-artifact@v4
@@ -106,7 +86,6 @@ jobs:
         path: ${{ matrix.artifact_name }}
         retention-days: 90
 
-  # Job para crear release cuando se pushea un tag
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -116,21 +95,21 @@ jobs:
     - name: Descargar artefactos Windows
       uses: actions/download-artifact@v4
       with:
-        name: SIRE_Terminal_Windows.exe
+        name: ExampleApp_Windows.exe
         path: ./windows
 
     - name: Descargar artefactos macOS
       uses: actions/download-artifact@v4
       with:
-        name: SIRE_Terminal_macOS
+        name: ExampleApp_macOS
         path: ./macos
 
     - name: Crear Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ./windows/SIRE_Terminal.exe
-          ./macos/SIRE_Terminal
+          ./windows/ExampleApp.exe
+          ./macos/ExampleApp
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
