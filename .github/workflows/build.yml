@@ -62,14 +62,17 @@ jobs:
           --assume-yes-for-downloads `
           --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" `
           --enable-plugin=tk-inter `
-          --include-module=customtkinter `
-          --include-module=pandas `
-          --include-module=openpyxl `
-          --include-module=PIL `
+          --include-package=customtkinter `
+          --include-package=pandas `
+          --include-package=openpyxl `
+          --include-package=PIL `
+          --include-package=numpy `
           --nofollow-import-to=matplotlib `
           --nofollow-import-to=scipy `
           --nofollow-import-to=pytest `
           --nofollow-import-to=IPython `
+          --nofollow-import-to=pandas.tests `
+          --nofollow-import-to=numpy.testing `
           sire_terminal.py
 
     - name: Build macOS
@@ -83,14 +86,17 @@ jobs:
           --assume-yes-for-downloads \
           --include-data-dir="${{ steps.ctk.outputs.path }}=customtkinter" \
           --enable-plugin=tk-inter \
-          --include-module=customtkinter \
-          --include-module=pandas \
-          --include-module=openpyxl \
-          --include-module=PIL \
+          --include-package=customtkinter \
+          --include-package=pandas \
+          --include-package=openpyxl \
+          --include-package=PIL \
+          --include-package=numpy \
           --nofollow-import-to=matplotlib \
           --nofollow-import-to=scipy \
           --nofollow-import-to=pytest \
           --nofollow-import-to=IPython \
+          --nofollow-import-to=pandas.tests \
+          --nofollow-import-to=numpy.testing \
           sire_terminal.py
 
     - name: Subir artefacto
