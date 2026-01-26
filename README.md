@@ -1,71 +1,81 @@
-# SIRE Terminal 🛂
+# Cross-Platform Python App Builder 🔧
 
-Herramienta de escritorio para convertir archivos **Police Report** al formato requerido por **SIRE** (Sistema de Información para el Reporte de Extranjeros) de Migración Colombia.
+GitHub Actions workflow para **compilar aplicaciones Python** en **Windows y macOS** simultáneamente usando **Nuitka**.
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Ready-2088FF.svg)
+![Nuitka](https://img.shields.io/badge/Nuitka-Compiler-orange.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-## Características
+## ¿Qué hace?
 
-- 🔍 **Detección inteligente de columnas** - Reconoce automáticamente los campos del Police Report
-- 🌎 **249 códigos de países** - Base de datos oficial de Migración Colombia
-- 🏙️ **Ciudades colombianas** - Detecta destinos locales automáticamente
-- 📊 **Múltiples formatos** - Excel (.xlsx, .xls), CSV y TXT
-- 🎨 **Interfaz moderna** - GUI oscura estilo terminal
-- ⚡ **Portable** - No requiere instalación
+- ✅ Compila tu app Python a **ejecutable nativo** (no necesita Python instalado)
+- ✅ Genera binarios para **Windows (.exe)** y **macOS** automáticamente
+- ✅ Build en la nube gratis (GitHub Actions)
+- ✅ Más pequeño y rápido que PyInstaller
 
-## Descarga
+## Cómo usar este template
 
-| Sistema | Descargar |
-|---------|-----------|
-| Windows | [SIRE_Terminal.exe](../../releases/latest) |
-| macOS | [SIRE_Terminal](../../releases/latest) |
+### 1. Copia el workflow
 
-## Uso
+Copia `.github/workflows/build.yml` a tu repositorio.
 
-1. Ejecutar `SIRE_Terminal.exe` (Windows) o `SIRE_Terminal` (macOS)
-2. Seleccionar archivo Police Report
-3. Ingresar código del establecimiento
-4. Ingresar código de ciudad (default: 5001 = Medellín)
-5. Seleccionar tipo de movimiento (Entrada/Salida)
-6. Clic en **PROCESAR REGISTRO**
-7. Clic en **EXTRAER ARCHIVO SIRE**
+### 2. Ajusta el archivo principal
 
-## Formato de salida
+Edita el workflow y cambia `sire_terminal.py` por tu archivo principal:
 
-El archivo generado contiene 13 campos separados por TAB:
-
-```
-Código Hotel | Ciudad | Tipo Doc | Número Doc | Nacionalidad | Apellido 1 | Apellido 2 | Nombres | Movimiento | Fecha Mov | Procedencia | Destino | Fecha Nac
+```yaml
+sire_terminal.py  →  tu_app.py
 ```
 
-## Requisitos del sistema
+### 3. Ajusta las dependencias
 
-- **Windows**: Windows 10/11 (64-bit)
-- **macOS**: macOS 10.14+ (Intel o Apple Silicon)
+Modifica el paso "Instalar dependencias":
 
-## Compilar desde código fuente
+```yaml
+pip install nuitka customtkinter pandas openpyxl pillow
+```
+
+### 4. Push y listo
 
 ```bash
-# Clonar repositorio
-git clone https://github.com/jihadz14/sire-terminal.git
-cd sire-terminal
-
-# Instalar dependencias
-pip install -r requirements.txt
-
-# Ejecutar
-python sire_terminal.py
+git push
 ```
 
-## Tecnologías
+GitHub compilará automáticamente para ambas plataformas.
 
-- Python 3.9+
-- CustomTkinter (GUI)
-- Pandas (procesamiento de datos)
-- Nuitka (compilación)
+## Estructura del workflow
+
+```yaml
+Jobs:
+  ├── build (windows-latest)  → SIRE_Terminal.exe
+  └── build (macos-latest)    → SIRE_Terminal
+```
+
+## Ventajas vs PyInstaller
+
+| Característica | Nuitka | PyInstaller |
+|---------------|--------|-------------|
+| Tamaño | ~30-60 MB | ~150-250 MB |
+| Velocidad | Más rápido | Normal |
+| Compilación | A código C | Empaquetado |
+| Anti-virus | Menos falsos positivos | Más detecciones |
+
+## Requisitos
+
+- Repositorio público (builds ilimitados gratis)
+- O privado (2,000 min/mes gratis)
+
+## Tiempo de build
+
+| Plataforma | Tiempo aprox. |
+|------------|---------------|
+| Windows | 40-60 min |
+| macOS | 25-35 min |
+
+## Descargar ejecutables
+
+Después del build, descarga desde **Actions → Artifacts** o crea un Release.
 
 ---
 
-Desarrollado por **E.Herrera** | Colombia 🇨🇴
+by **E.Herrera** 🇨🇴
